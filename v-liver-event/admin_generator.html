@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTMLコード生成ツール</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f4; padding: 20px; }
+        h1 { text-align: center; font-size: 20px; }
+        
+        .container { display: flex; gap: 20px; }
+        .column { flex: 1; background: white; padding: 15px; border-radius: 8px; border-top: 5px solid #ccc; }
+        .red { border-color: #ff4d4d; } .blue { border-color: #4d79ff; } .yellow { border-color: #ffcc00; }
+
+        .drop-zone {
+            border: 3px dashed #ccc; padding: 20px; text-align: center; background: #fafafa;
+            color: #888; border-radius: 8px; margin-bottom: 15px; cursor: pointer;
+        }
+        .drop-zone.dragover { background: #eef; border-color: #4d79ff; }
+
+        /* プレビューリスト */
+        .preview-list { max-height: 200px; overflow-y: auto; border: 1px solid #eee; margin-bottom: 10px; }
+        .item { display: flex; align-items: center; padding: 5px; border-bottom: 1px solid #eee; font-size: 12px; }
+        .item img { width: 30px; height: 30px; object-fit: cover; margin-right: 5px; border-radius: 50%; }
+        .item input { flex: 1; border: 1px solid #ddd; padding: 2px; margin-left: 5px; }
+
+        /* コード出力エリア */
+        textarea { width: 100%; height: 150px; font-family: monospace; font-size: 11px; background: #222; color: #0f0; border: none; padding: 10px; box-sizing: border-box; }
+        .copy-btn { width: 100%; padding: 10px; background: #333; color: white; border: none; cursor: pointer; margin-top: 5px; }
+        .copy-btn:hover { background: #555; }
+    </style>
+</head>
+<body>
+
+    <h1>STEP 2: HTML生成ツール</h1>
+    <p style="text-align:center; font-size:12px;">画像をドロップしてリストを作り、「コードを生成」→「コピー」して、各htmlファイルに貼り付けてください。</p>
+
+    <div class="container">
+        <script>
+            const teams = ['red', 'blue', 'yellow'];
+            teams.forEach(color => {
+                document.write(`
+                    <div class="column ${color}">
+                        <h2 style="text-transform:uppercase; text-align:center;">${color}</h2>
+                        
+                        <div class="drop-zone" id="drop-${color}">
+                            画像をここにドロップ<br>
+                            <small>images/${color}/ 内の画像</small>
+                        </div>
+                        
+                        <div class="preview-list" id="list-${color}"></div>
+                        
+                        <button class="copy-btn" onclick="generateCode('${color}')">▼ コードを生成・更新</button>
+                        <textarea id="code-${color}" readonly placeholder="ここにHTMLコードが出ます"></textarea>
+                        <button class="copy-btn" onclick="copyText('${color}')">📋 コードをコピー</button>
+                    </div>
+                `);
+            });
+        </script>
+    </div>
+
+<script>
+    const dataStore = { red: [], blue: [], yellow: [] };
+
+    window.onload = function() {
+        teams.forEach(color => setupDropZone(color));
+    };
+
+    function setupDropZone(color) {
+        const zone = document.getElementById('drop-' + color);
+        zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+        zone.addEventListener('dragleave', e => { e.preventDefault(); zone.classList.remove('dragover'); });
+        zone.addEventListener('drop', e => {
+            e.preventDefault(); zone.classList.remove('dragover');
+            handleFiles(color, e.dataTransfer.files);
+        });
+    }
+
+    function handleFiles(color, files) {
+        Array.from(files).forEach(file => {
+            if (!file.type.startsWith('image/')) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // ファイル名から名前を推測
+                const cleanName = file.name.replace(/\.[^/.]+$/, "");
+                dataStore[color].push({
+                    name: cleanName,
+                    filename: file.name, // 本番用のパス生成に使う
+                    preview: e.target.result // プレビュー表示用
+                });
+                renderList(color);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function renderList(color) {
+        const list = document.getElementById('list-' + color);
+        list.innerHTML = '';
+        dataStore[color].forEach((item, idx) => {
+            const div = document.createElement('div');
+            div.className = 'item';
+            div.innerHTML = `
+                <img src="${item.preview}">
+                <input value="${item.name}" oninput="dataStore['${color}'][${idx}].name = this.value">
+                <button onclick="removeItem('${color}', ${idx})">×</button>
+            `;
+            list.appendChild(div);
+        });
+    }
+
+    function removeItem(color, idx) {
+        dataStore[color].splice(idx, 1);
+        renderList(color);
+    }
+
+    // ★ここが重要：HTMLコードを作る部分★
+    function generateCode(color) {
+        let html = '';
+        dataStore[color].forEach(item => {
+            // 画像パスは "images/red/ファイル名" になるようにする
+            const imgPath = `images/${color}/${item.filename}`;
+            
+            html += `
+            <div class="member-card">
+                <a href="#" class="member-link" target="_blank">
+                    <div class="member-img">
+                        <img src="${imgPath}" alt="${item.name}">
+                    </div>
+                    <h3 class="member-name">${item.name}</h3>
+                </a>
+            </div>\n`;
+        });
+        document.getElementById('code-' + color).value = html;
+    }
+
+    function copyText(color) {
+        const textarea = document.getElementById('code-' + color);
+        textarea.select();
+        document.execCommand('copy');
+        alert(color + 'チームのコードをコピーしました！\n' + color + '.html に貼り付けてください。');
+    }
+</script>
+
+</body>
+</html>

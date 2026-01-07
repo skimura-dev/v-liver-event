@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>321 Vライバー チーム対抗戦</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { font-family: sans-serif; background-color: #f8f8f8; color: #333; margin: 0; }
+        .main-header { text-align: center; padding: 40px 0; background: #fff; border-bottom: 1px solid #ddd; }
+        h1 { margin: 0; font-size: 28px; letter-spacing: 2px; }
+
+        /* 3カラムレイアウト */
+        .teams-container {
+            display: flex; justify-content: center; gap: 20px;
+            max-width: 1100px; margin: 50px auto; padding: 0 20px; flex-wrap: wrap;
+        }
+        .team-column {
+            flex: 1; min-width: 280px;
+            background: #222; border-radius: 12px; padding: 25px;
+            text-align: center; color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); border-top: 6px solid #555;
+        }
+        .col-red { border-color: #d32f2f; background: linear-gradient(160deg, #330000 0%, #111 100%); }
+        .col-blue { border-color: #1976d2; background: linear-gradient(160deg, #000033 0%, #111 100%); }
+        .col-yellow { border-color: #fbc02d; background: linear-gradient(160deg, #332b00 0%, #111 100%); }
+
+        .team-title { font-size: 26px; font-weight: bold; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 1px; }
+        .col-red .team-title { color: #ff5252; }
+        .col-blue .team-title { color: #448aff; }
+        .col-yellow .team-title { color: #ffeb3b; }
+
+        /* 団長カード */
+        .leaders-area { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .leader-card {
+            display: flex; align-items: center; text-decoration: none; color: white;
+            background: rgba(255,255,255,0.1); padding: 10px; border-radius: 50px;
+            transition: transform 0.2s, background 0.2s; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .leader-card:hover { transform: scale(1.02); background: rgba(255,255,255,0.2); }
+        .leader-img {
+            width: 60px; height: 60px; border-radius: 50%; object-fit: cover;
+            border: 2px solid white; margin-right: 15px; background: #555;
+        }
+        .leader-info { text-align: left; }
+        .leader-name { font-size: 16px; font-weight: bold; margin: 0; }
+        .leader-role { font-size: 11px; opacity: 0.8; }
+
+        .more-btn {
+            display: inline-block; padding: 10px 25px;
+            background: rgba(255,255,255,0.15); color: #ddd;
+            text-decoration: none; border-radius: 30px; font-size: 14px;
+            transition: 0.3s; border: 1px solid rgba(255,255,255,0.2);
+        }
+        .more-btn:hover { background: white; color: #333; }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <h1>赤青黄チーム対抗戦2026</h1>
+    </header>
+
+    <div class="teams-container">
+        
+        <div class="team-column col-red">
+            <div class="team-title">RED TEAM</div>
+            
+            <div class="leaders-area">
+                <a href="red.html" class="leader-card">
+                    <img src="images/red/紫桃たろぁ.png" class="leader-img">
+                    <div class="leader-info">
+                        <p class="leader-role">団長</p>
+                        <p class="leader-name">紫桃たろぁ</p>
+                    </div>
+                </a>
+                
+                </div>
+
+            <a href="red.html" class="more-btn">メンバーを見る →</a>
+        </div>
+
+        <div class="team-column col-blue">
+            <div class="team-title">BLUE TEAM</div>
+            
+            <div class="leaders-area">
+                <a href="blue.html" class="leader-card">
+                    <img src="images/blue/猫藤暁夜.png" class="leader-img">
+                    <div class="leader-info">
+                        <p class="leader-role">団長</p>
+                        <p class="leader-name">猫藤暁夜</p>
+                    </div>
+                </a>
+            </div>
+
+            <a href="blue.html" class="more-btn">メンバーを見る →</a>
+        </div>
+
+        <div class="team-column col-yellow">
+            <div class="team-title">YELLOW TEAM</div>
+            
+            <div class="leaders-area">
+                <a href="yellow.html" class="leader-card">
+                    <img src="images/yellow/黄団長の名前.png" class="leader-img">
+                    <div class="leader-info">
+                        <p class="leader-role">団長</p>
+                        <p class="leader-name">黄団長の名前</p>
+                    </div>
+                </a>
+            </div>
+
+            <a href="yellow.html" class="more-btn">メンバーを見る →</a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p style="text-align: center; color: #888; margin-top: 50px;">&copy; 2025 V-LIVER EVENT</p>
+    </footer>
+
+</body>
+</html>
